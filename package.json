@@ -1,0 +1,25 @@
+{
+  "name": "dvelli",
+  "version": "1.0.0",
+  "description": "Express and redis URL shortener",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.15.2",
+    "redis": "^2.7.1",
+    "shortid": "^2.2.8"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/valtyrorn/dvelli.git"
+  },
+  "author": "VÖK",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/valtyrorn/dvelli/issues"
+  },
+  "homepage": "https://github.com/valtyrorn/dvelli#readme"
+}
