@@ -1,15 +1,21 @@
 // == INCLUDES ==
 var express = require('express');
 var shorten = require('./blocks/shorten.js');
+var meta = require('./blocks/meta.js');
 var bodyParser = require('body-parser');
+var path = require('path');
 
 // == INSTANCE SETUP ==
 var app = express();
 
 // == MIDDLEWARE SETUP ==
-app.use(bodyParser.urlencoded())
+app.use(bodyParser.urlencoded({extended: true}));
+app.use('/static', express.static('static'));
 
 // == EXPRESS ROUTES ==
+app.get('/', function(req, res){
+  res.sendFile(path.join(__dirname, 'static/html/index.html'));
+});
 app.get('/:key', function(req, res){
   shorten.resolve(req.params.key).catch(function(err){
     res.status(400).json({ success: false, reason: err.message });
@@ -22,7 +28,6 @@ app.get('/:key', function(req, res){
   })
 });
 app.post('/shorten', function(req, res){
-  console.log(req.body);
   if(req.body.url == undefined){
     res.status(400).json({
       success: false,
@@ -48,6 +53,14 @@ app.get('/exists/:key', function(req, res){
       success: true,
       exists: exists
     });
+  });
+});
+app.post('/info', function(req, res){
+  meta(req.body.url).catch(function(err){
+    res.status(400).json({ success: false, reason: err.message });
+  }).then(function(meta){
+    meta.success = true;
+    res.json(meta);
   });
 });
 

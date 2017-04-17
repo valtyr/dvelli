@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>vök.co</title>
+    <script src="/static/js/fetch.js" charset="utf-8"></script>
+    <style media="screen">
+      .meta .img{
+        height: 100px;
+        width: 100px;
+      }
+    </style>
+  </head>
+  <body>
+    <input type="text" name="" value="" id="url">
+    <div class="meta">
+      <div class="img"></div>
+      <div class="title"></div>
+      <div class="url"></div>
+      <div class="description"></div>
+    </div>
+
+
+    <script type="text/javascript">
+      var urlField = document.querySelector('#url');
+      urlField.addEventListener('paste', function(e){
+        var params = new URLSearchParams();
+        var url = e.clipboardData.getData('text/plain');
+        if(url == undefined) console.log("no url");
+        else{
+          params.append('url', url);
+          setTimeout(function () {
+            fetch('/info', {
+              method: 'POST',
+              body: params
+            }).then(function(response) {
+              return response.json();
+            }).then(function(json) {
+              console.log(json);
+
+              var imgurl = (json.image != undefined && json.image != null) ? json.image : '';
+
+              document.querySelector('.meta .img').style.backgroundImage = "url(\'" + imgurl + "\')";
+              document.querySelector('.meta .title').innerHTML = (json.title != undefined && json.title != null)? json.title : '';
+              document.querySelector('.meta .url').innerHTML = (json.absolute != undefined && json.absolute != null)? json.absolute : '';
+              document.querySelector('.meta .description').innerHTML = (json.description != undefined && json.description != null)? json.description : '';
+
+
+            }).catch(function(ex) {
+              console.log('parsing failed', ex);
+            });
+          }, 100);
+        }
+      });
+    </script>
+  </body>
+</html>
